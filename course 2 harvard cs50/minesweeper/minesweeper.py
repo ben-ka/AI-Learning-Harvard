@@ -1,5 +1,6 @@
 import itertools
 import random
+import probability
 
 
 class Minesweeper():
@@ -160,12 +161,12 @@ class MinesweeperAI():
     Minesweeper game player
     """
 
-    def __init__(self, height=8, width=8):
+    def __init__(self, height=8, width=8, CountMines = 8):
 
         # Set initial height and width
         self.height = height
         self.width = width
-
+        self.prob = probability(width, height, CountMines)
         # Keep track of which cells have been clicked on
         self.moves_made = set()
 
@@ -182,6 +183,7 @@ class MinesweeperAI():
         to mark that cell as a mine as well.
         """
         self.mines.add(cell)
+        self.prob.CellMine()
         for sentence in self.knowledge:
             sentence.mark_mine(cell)
 
@@ -191,6 +193,7 @@ class MinesweeperAI():
         to mark that cell as safe as well.
         """
         self.safes.add(cell)
+        self.prob.CellSafe()
         for sentence in self.knowledge:
             sentence.mark_safe(cell)
 
@@ -238,9 +241,15 @@ class MinesweeperAI():
         new_sentence = Sentence(new_sentence_set, count)
         
 
+        newMines = new_sentence.known_mines()
 
-        self.mines = self.mines.union(new_sentence.known_mines())
-        self.safes = self.safes.union(new_sentence.known_safes())
+        
+
+
+        newSafes = new_sentence.known_safes()
+
+        self.mines = self.mines.union(newMines)
+        self.safes = self.safes.union(newSafes)
         self.knowledge.append(new_sentence)
         
         new_combined_sentences = []
@@ -261,7 +270,11 @@ class MinesweeperAI():
         for kb in self.knowledge:
             self.mines = self.mines.union(kb.known_mines())
             self.safes = self.safes.union(kb.known_safes())
-            
+
+        for mine in self.mines:
+            self.prob.CellMine()
+        for safe in self.safes:
+            self.prob.CellSafe()    
 
         print(self.mines)
         print(self.moves_made)
