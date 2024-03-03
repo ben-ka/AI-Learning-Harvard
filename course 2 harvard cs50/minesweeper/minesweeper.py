@@ -278,6 +278,7 @@ class MinesweeperAI():
 
         print(self.mines)
         print(self.moves_made)
+        print(self.prob.grid)
             
 
 
