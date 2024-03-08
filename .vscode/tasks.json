@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "corpusNumber",
+            "type": "promptString",
+            "description": "Enter the corpus number (Default: 1)",
+            "default": "1"
+        }
+    ],
+    "tasks": [
+        {
+            "type": "process",
+            "label": "Run pagerank",
+            "command": "python",
+            "args": [
+                "course-3-harvard-cs50/pagerank/pagerank.py",
+                "C:/Users/Administrator/OneDrive/Documents/python-project-vscode/ai-learning/course-3-harvard-cs50/pagerank/corpus${input:corpusNumber}",
+                "course-3-harvard-cs50/pagerank/pagerank.py",
+                "C:/Users/Administrator/OneDrive/Documents/python-project-vscode/ai-learning/course-3-harvard-cs50/pagerank/corpus${input:corpusNumber}"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

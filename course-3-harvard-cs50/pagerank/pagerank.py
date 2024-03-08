@@ -4,23 +4,28 @@ import re
 import sys
 
 DAMPING = 0.85
-SAMPLES = 10000000
+SAMPLES = 10_000_000
+MARGIN = 0.0001
 
 
 def main():
     for arg in sys.argv:
         print(arg)
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         sys.exit("Usage: python pagerank.py corpus")
     corpus = crawl(sys.argv[1])
     ranks = sample_pagerank(corpus, DAMPING, SAMPLES)
     print(f"PageRank Results from Sampling (n = {SAMPLES})")
     for page in sorted(ranks):
         print(f"  {page}: {ranks[page]:.4f}")
-    ranks = iterate_pagerank(corpus, DAMPING)
+
+
+    ranks = iterate_pagerank(corpus, DAMPING, MARGIN)
     print(f"PageRank Results from Iteration")
     for page in sorted(ranks):
         print(f"  {page}: {ranks[page]:.4f}")
+
+
 
 
 def crawl(directory):
@@ -103,7 +108,7 @@ def sample_pagerank(corpus : dict, damping_factor : float, n):
     
     return prob_dict
     
-def iterate_pagerank(corpus : dict, damping_factor : float):
+def iterate_pagerank(corpus : dict, damping_factor : float, margin : float = 0.001):
     """
     Return PageRank values for each page by iteratively updating
     PageRank values until convergence.
@@ -112,8 +117,63 @@ def iterate_pagerank(corpus : dict, damping_factor : float):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
+    
+    
+    start_prob_dict = {}
+    updated_prob_dict = {}
+    pages_that_link_with_dict = {}
+    length = len(list(corpus.keys()))
+    gains_from_loop = 0
+    for page in corpus:
 
+        start_prob_dict[page] = 1 / length + (1 - damping_factor) / length
+        pages_that_link_with_dict[page] = set()
+        updated_prob_dict[page] = 1 / length
+    
+    isGoing = True
+
+    for page in corpus:
+        for possiblePage in corpus:
+            if page in corpus[possiblePage]:
+                pages_that_link_with_dict[page].add(possiblePage)
+    count = 0
+    while isGoing:
+        old_prob_dict = updated_prob_dict.copy()
+        maxChange = 0.0
+        for page in pages_that_link_with_dict:
+            for linkedPages in pages_that_link_with_dict[page]:
+                gains_from_loop += updated_prob_dict[linkedPages] / len(corpus[linkedPages])
                 
+            # sum_of_pageranks = sum(updated_prob_dict.values())
+            updated_prob_dict[page] = start_prob_dict[page] + damping_factor * gains_from_loop
+            maxChange = max(maxChange, abs(updated_prob_dict[page] - old_prob_dict[page]))
+
+            # if (count == 6000):
+                
+            #     isGoing = False
+                  
+            if maxChange <= margin:
+                isGoing = False
+
+            gains_from_loop = 0
+            count += 1
+
+ 
+    sum_of_pageranks = sum(updated_prob_dict.values())
+
+    if sum_of_pageranks == 0:   
+        raise NotImplementedError  
+
+    # Normalize the PageRank values
+    for page in updated_prob_dict:
+        updated_prob_dict[page] /= sum_of_pageranks
+
+    return updated_prob_dict
+
+
+
+        
+    
 
         
 
@@ -123,7 +183,8 @@ def iterate_pagerank(corpus : dict, damping_factor : float):
 
 
     
+# iterate_pagerank(corpus=crawl(sys.argv[1]), damping_factor= DAMPING)
 
 
-if __name__ == "__main__":
-    main()
+
+main()
