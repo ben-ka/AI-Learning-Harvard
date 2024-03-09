@@ -5,7 +5,7 @@
             "id": "corpusNumber",
             "type": "promptString",
             "description": "Enter the corpus number (Default: 1)",
-            "default": "1"
+            "default": "0"
         }
     ],
     "tasks": [
