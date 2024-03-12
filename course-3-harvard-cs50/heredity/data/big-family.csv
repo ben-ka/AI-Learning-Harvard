@@ -1,0 +1,15 @@
+name,mother,father,trait
+Arthur,,,0
+Charlie,Molly,Arthur,0
+Fred,Molly,Arthur,1
+Ginny,Molly,Arthur,
+Molly,,,0
+Ron,Molly,Arthur,
+Hermione,Arthur,Molly,0
+Molly,,,
+Ron,Molly,Arthur,0
+Rose,Ron,Hermione,
+Harry,Lily,James,
+James,,,1
+Lily,,,0
+Max,Lily,Fred,1
