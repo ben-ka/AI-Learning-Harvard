@@ -40,7 +40,7 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    print(board)
+    
     actionSet = []
     try:
         for row in range(3):
@@ -48,7 +48,6 @@ def actions(board):
                 if board[row][cell] == None:
                     indexes = (row, cell)
                     actionSet.append(indexes)
-
         return actionSet
     except TypeError:
         pass
@@ -63,7 +62,7 @@ def result(board, action):
     players_turn = player(board)
     try:
         copy = [row[:] for row in board]
-        (copy[action[0]])[action[1]] = players_turn
+        (copy[action[0]][action[1]]) = players_turn
         
         return copy
     
@@ -209,9 +208,10 @@ def minimax(board):
         action_values = {}
         try:
             for action in actions(board):
-                action_values[action] = MinValue(utility(result(board,action)))
+                action_values[action] = utility(result(board,action))
+                print(f"{action} + {action_values[action]}")
                 v = max(v,action_values[action])
-                
+            print(f"highest value {v}")    
             
             for action in action_values.keys():
                 if action_values[action] == v:
@@ -225,7 +225,8 @@ def minimax(board):
         action_values = {}
         try:
             for action in actions(board):
-                action_values[action] =  MaxValue(utility(result(board, action)))
+                action_values[action] =  terminal(result(board, MaxValue(result(board, action))))
+                print(f"{action} + {action_values[action]}")
                 v = min(v,action_values[action] )
                 
                 
@@ -238,9 +239,13 @@ def minimax(board):
     if terminal(board):
         return None
     if player(board) == X:
-        return MaxValue(board)
+        max_value = MaxValue(board)
+        print(f"max value {max_value}")
+        return max_value
     if player(board) == O:
-        return MinValue(board)
+        min_value = MinValue(board)
+        print(f"min value {min_value}" )
+        return min_value
     
     
 
