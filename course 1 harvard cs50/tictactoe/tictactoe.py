@@ -202,20 +202,21 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    def MaxValue(board):
+    def HelperMaxValue(board):
         v = -999
         
         action_values = {}
         try:
             for action in actions(board):
                 action_values[action] = utility(result(board,action))
-                print(f"{action} + {action_values[action]}")
+            
                 v = max(v,action_values[action])
-            print(f"highest value {v}")    
+
             
             for action in action_values.keys():
                 if action_values[action] == v:
-                    return action
+                    
+                    return (action, action_values[action])
         except TypeError:
             pass
         
@@ -225,14 +226,56 @@ def minimax(board):
         action_values = {}
         try:
             for action in actions(board):
-                action_values[action] =  terminal(result(board, MaxValue(result(board, action))))
+                (new_act, act_value) = HelperMaxValue(result(board, action))
+                action_values[action] =  act_value
                 print(f"{action} + {action_values[action]}")
                 v = min(v,action_values[action] )
-                
+            print(f"lowest value {v}") 
                 
             for action in action_values.keys():
                 if action_values[action] == v:
+                    print(f"{action} is the action we should take")
                     return action
+        except TypeError:
+            pass
+
+
+    def MaxValue(board):
+        v = -999
+        action_values = {}
+        try:
+            all_actions = actions(board)
+            if len(all_actions) == 1:
+                return all_actions[0]
+            for action in all_actions:
+                (new_act, act_value) = HelperMinValue(result(board, action))
+                action_values[action] =  act_value
+                print(f"{action} + {action_values[action]}")
+                v = max(v,action_values[action] )
+            
+                
+            for action in action_values.keys():
+                if action_values[action] == v:
+                    print(f"{action} is the action we should take")
+                    return action
+        except TypeError:
+            pass
+    
+    def HelperMinValue(board):
+        v = 999
+        
+        action_values = {}
+        try:
+            for action in actions(board):
+                action_values[action] = utility(result(board,action))
+            
+                v = min(v,action_values[action])
+
+            
+            for action in action_values.keys():
+                if action_values[action] == v:
+                    
+                    return (action, action_values[action])
         except TypeError:
             pass
 
