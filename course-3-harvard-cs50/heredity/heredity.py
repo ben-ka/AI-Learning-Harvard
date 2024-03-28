@@ -295,34 +295,7 @@ def has_trait_based_probabilities(prob) -> float:
         total += prob[i] * PROBS["trait"][i][True]
     return total
 
-def update(probabilities, one_gene, two_genes, have_trait, p):
-    """
-    Add to `probabilities` a new joint probability `p`.
-    Each person should have their "gene" and "trait" distributions updated.
-    Which value for each distribution is updated depends on whether
-    the person is in `have_gene` and `have_trait`, respectively.
-    """
-    raise NotImplementedError
 
-
-def normalize(probabilities):
-    """
-    Update `probabilities` such that each probability distribution
-    is normalized (i.e., sums to 1, with relative proportions the same).
-    """
-    raise NotImplementedError
-
-
-father_gene = {
-    0 : 0.5,
-    1: 0.3,
-    2 : 0.2
-}
-mother_gene = {
-    0 : 0.5,
-    1 : 0.3,
-    2 : 0.2
-}
 
 # print(calculate_children_gene_probabilities(PROBS["gene"],PROBS["gene"]))
 # print(calculate_children_gene_probabilities(father_gene, mother_gene))

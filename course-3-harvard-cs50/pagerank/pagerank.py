@@ -6,7 +6,7 @@ from time import time
 
 # ----- constants --------------------------------
 DAMPING = 0.85
-SAMPLES = int(8e6)
+SAMPLES = int(10e6)
 MARGIN = 0.0001
 
 ## ! The PageRank algorithm
@@ -26,7 +26,7 @@ def main():
     time_diff_sampling = time() - now
     print(f"PageRank Results from Sampling (n = {SAMPLES})")
     for page in sorted(ranks):
-        print(f"  {page}: {ranks[page]:.4f}")
+        print(f"  {page}: {ranks[page]:.5f}")
     
 
     # handles the fast iteration approach
@@ -36,12 +36,12 @@ def main():
     time_diff_iteration = time() - now
     print(f"PageRank Results from Iteration")
     for page in sorted(ranks):
-        print(f"  {page}: {ranks[page]:.4f}")
+        print(f"  {page}: {ranks[page]:.5f}")
         
 
     # printed time taken for each metric
     print(f"Time taken for sampling: {time_diff_sampling:.4f} seconds")
-    print(f"Time taken for iteration: {time_diff_iteration:.15f} seconds")
+    print(f"Time taken for iteration: {time_diff_iteration:.30f} seconds")
 
 def crawl(directory):
     """
